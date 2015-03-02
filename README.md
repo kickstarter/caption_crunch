@@ -1,6 +1,6 @@
 # CaptionCrunch
 
-TODO: Write a gem description
+Praise @noopkat for the name.
 
 ## Installation
 
