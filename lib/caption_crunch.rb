@@ -1,5 +1,8 @@
 require "caption_crunch/version"
 
 module CaptionCrunch
-  # Your code goes here...
+  autoload :ParseError, 'caption_crunch/parse_error'
+
+  def self.parse(file)
+  end
 end
