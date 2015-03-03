@@ -8,8 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = CaptionCrunch::VERSION
   spec.authors       = ["David Peter"]
   spec.email         = ["dpeter@kickstarter.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{A collection of parsers for various caption/subtitle files}
   spec.homepage      = ""
   spec.license       = "MIT"
 
