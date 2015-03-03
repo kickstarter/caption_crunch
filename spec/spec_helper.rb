@@ -8,6 +8,6 @@ require "caption_crunch"
 class MiniTest::Spec
   def fixture(path)
     path = File.join(File.dirname(__FILE__), 'fixtures', path)
-    File.open(path).read
+    File.open(path)
   end
 end
