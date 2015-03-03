@@ -4,9 +4,10 @@ describe 'CaptionCrunch' do
   describe 'parse' do
     describe 'parsing entirely wrong signature' do
       it 'should raise CaptionCrunch::ParseError' do
-        assert_raises(CaptionCrunch::ParseError) do
+        error = ->{
           CaptionCrunch.parse('SPIDERWEBVTT')
-        end
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /File must start with WEBVTT/
       end
     end
 
@@ -18,15 +19,22 @@ describe 'CaptionCrunch' do
 
     describe 'parsing signature starting with WEBVTT but no space after' do
       it 'should raise CaptionCrunch::ParseError' do
-        assert_raises(CaptionCrunch::ParseError) do
+        error = ->{
           CaptionCrunch.parse('WEBVTTINVALID')
-        end
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /File must start with WEBVTT/
       end
     end
 
     describe 'parsing signature starting and ending with WEBVTT' do
       it 'should not raise CaptionCrunch::ParseError' do
         CaptionCrunch.parse('WEBVTT')
+      end
+    end
+
+    describe 'parsing signature with a BOM' do
+      it 'should not raise CaptionCrunch::ParseError' do
+        CaptionCrunch.parse("\uFEFFWEBVTT")
       end
     end
 
@@ -45,14 +53,79 @@ describe 'CaptionCrunch' do
         subject.cues.first.end_time.must_equal(2000)
       end
 
-      it 'should parse cue end times with settings after' do
-        end_time = 1 * 60 * 60 * 1000 + 3 * 60 * 1000 + 15 * 1000
+      it 'should parse cue end times with >=100 hours' do
+        end_time = 201 * 60 * 60 * 1000 + 3 * 60 * 1000 + 15 * 1000
         subject.cues.last.end_time.must_equal(end_time)
+      end
+
+      it 'should parse cue end times with settings after' do
+        end_time = 15 * 1000
+        subject.cues[1].end_time.must_equal(end_time)
       end
 
       it 'should parse cue payloads' do
         subject.cues.last.payload.must_equal('TTYL.')
       end
+
+      it 'should support multi-line cue payloads' do
+        subject.cues[1].payload.must_equal(%Q{
+- I don't like shrimp, but I like ramen. All kinds of ramen. Miso ramen, tonkotsu ramen, shoyu ramen, Totto ramen...
+- That's nice.
+        }.strip)
+      end
     end
+
+    describe 'parsing cue with invalid minutes' do
+      it 'should raise CaptionCrunch::ParseError' do
+        error = ->{
+          CaptionCrunch.parse(%Q{WEBVTT
+
+            00:60:00.000 --> 01:02:00.000
+            I'm invalid!
+          })
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /Invalid timestamp/
+      end
+    end
+
+    describe 'parsing cue without timings' do
+      it 'should raise CaptionCrunch::ParseError' do
+        error = ->{
+          CaptionCrunch.parse(%Q{WEBVTT
+
+            I'm invalid!
+            Woot!
+          })
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /Cue timings missing/
+      end
+    end
+
+    describe 'parsing cue with invalid seconds' do
+      it 'should raise CaptionCrunch::ParseError' do
+        error = ->{
+          CaptionCrunch.parse(%Q{WEBVTT
+
+            00:00:60.000 --> 01:02:00.000
+            I'm invalid!
+          })
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /Invalid timestamp/
+      end
+    end
+
+    describe 'parsing cue with invalid milliseconds' do
+      it 'should raise CaptionCrunch::ParseError' do
+        error = ->{
+          CaptionCrunch.parse(%Q{WEBVTT
+
+            00:00:00.1000 --> 01:02:00.000
+            I'm invalid!
+          })
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /Invalid timestamp/
+      end
+    end
+
   end
 end
