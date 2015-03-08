@@ -20,7 +20,17 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require 'caption_crunch'
+track = CaptionCrunch.parse(File.new('sample.vtt')) # returns a CaptionCrunch::Track instance
+# or
+track = CaptionCrunch.parse('WEBVTT')
+
+# track.cues is an array of CaptionCrunch::Cue instances
+track.cues.first.start_time
+track.cues.first.end_time
+track.cues.first.payload
+```
 
 ## Contributing
 
