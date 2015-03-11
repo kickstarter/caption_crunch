@@ -34,9 +34,10 @@ module CaptionCrunch
         # Returns a string corresponding to the contents of a File instance.
         # Alternatively, if the argument is not a File, simply calls `.to_s`.
         def read_file(file)
-          case file
-          when File then file.read
-          else file.to_s
+          if file.respond_to?(:read)
+            file.read
+          else
+            file.to_s
           end.strip
         end
 
