@@ -11,14 +11,15 @@ module CaptionCrunch
       #         102:01:43:204
       # http://dev.w3.org/html5/webvtt/#dfn-collect-a-webvtt-timestamp
       TIME_REGEX      = /\A(?:(\d\d+):)?([0-5]\d):([0-5]\d)\.(\d\d\d)\Z/.freeze
-      NEWLINE_REGEX   = /\r\n|\r|\n/.freeze
+      NEWLINE_REGEX   = /\n/.freeze
 
       class << self
         # Reads a file (or string) and returns a CaptionCrunch::Track instance.
         # Raises CaptionCrunch::ParseError if the input is malformed.
         def parse(file)
           contents = remove_bom(read_file(file))
-          segments = split_segments(contents)
+          normalized = normalize_linefeeds(contents)
+          segments = split_segments(normalized)
           ensure_signature(segments.shift)
 
           Track.new.tap do |track|
@@ -47,6 +48,10 @@ module CaptionCrunch
           else
             string
           end
+        end
+
+        def normalize_linefeeds(string)
+          string.encode(string.encoding, universal_newline: true)
         end
 
         # The WebVTT spec separates segments by two newlines or more.
