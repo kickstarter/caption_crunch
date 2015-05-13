@@ -127,5 +127,17 @@ describe 'CaptionCrunch' do
       end
     end
 
+    describe 'parsing cue with Windows-style line-endings' do
+      subject do
+        contents = "WEBVTT\r\n\r\n00:00:00.000 --> 00:00:02.000\r\nI work!"
+        CaptionCrunch.parse(contents)
+      end
+
+      it 'should parse correctly' do
+        subject.cues.count.must_equal 1
+        subject.cues.first.payload.must_equal "I work!"
+      end
+    end
+
   end
 end
