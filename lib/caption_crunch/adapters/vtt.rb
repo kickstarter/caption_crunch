@@ -35,11 +35,15 @@ module CaptionCrunch
         # Returns a string corresponding to the contents of a File instance.
         # Alternatively, if the argument is not a File, simply calls `.to_s`.
         def read_file(file)
-          if file.respond_to?(:read)
+          contents = if file.respond_to?(:read)
             file.read
           else
             file.to_s
-          end.strip
+          end
+
+          raise ParseError, "Invalid encoding" unless contents.valid_encoding?
+
+          contents.strip
         end
 
         def remove_bom(string)
