@@ -38,6 +38,15 @@ describe 'CaptionCrunch' do
       end
     end
 
+    describe 'parsing a binary file' do
+      it 'should raise a ParseError' do
+        error = ->{
+          CaptionCrunch.parse(fixture('binary.jpg'))
+        }.must_raise CaptionCrunch::ParseError
+        error.message.must_match /Invalid encoding/
+      end
+    end
+
     describe 'parsing a track with three cues' do
       subject { CaptionCrunch.parse(fixture('three_cues.vtt')) }
       it 'should return an object with three cues' do
