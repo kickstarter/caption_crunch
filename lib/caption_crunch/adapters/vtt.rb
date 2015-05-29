@@ -1,7 +1,7 @@
 module CaptionCrunch
   module Adapters
     class VTT
-      SIGNATURE_REGEX = /\AWEBVTT\Z|\AWEBVTT[ \t]/.freeze
+      SIGNATURE_REGEX = /\AWEBVTT\Z|\AWEBVTT[ \t\n]/.freeze
       COMMENT_REGEX   = /\ANOTE\Z|\ANOTE[ \t\n]/.freeze
       ARROW_REGEX     = /-->/.freeze
       # Format: hour:minute:second.milliseconds

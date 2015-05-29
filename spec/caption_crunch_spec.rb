@@ -148,5 +148,14 @@ describe 'CaptionCrunch' do
       end
     end
 
+    describe 'parsing with metadata headers' do
+      subject{ CaptionCrunch.parse(fixture('metadata_headers.vtt')) }
+
+      it 'should ignore them for now and parse cues' do
+        subject.cues.count.must_equal 1
+        subject.cues.first.payload.must_equal "Hey. I have metadata headers."
+      end
+    end
+
   end
 end
