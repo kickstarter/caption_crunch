@@ -1,5 +1,7 @@
 # CaptionCrunch
 
+[![Gem Version](https://badge.fury.io/rb/caption_crunch.svg)](http://badge.fury.io/rb/caption_crunch)
+
 Praise @noopkat for the name.
 
 ## Installation
