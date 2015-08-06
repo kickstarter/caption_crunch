@@ -1,6 +1,6 @@
 # CaptionCrunch
 
-[![Gem Version](https://badge.fury.io/rb/caption_crunch.svg)](http://badge.fury.io/rb/caption_crunch) [![Circle CI](https://circleci.com/gh/kickstarter/caption_crunch/tree/master.svg?style=shield)](https://circleci.com/gh/kickstarter/caption_crunch/tree/master)
+[![Gem Version](https://badge.fury.io/rb/caption_crunch.svg)](http://badge.fury.io/rb/caption_crunch) [![Circle CI](https://circleci.com/gh/kickstarter/caption_crunch/tree/master.svg?style=shield)](https://circleci.com/gh/kickstarter/caption_crunch/tree/master) [![Code Climate](https://codeclimate.com/github/kickstarter/caption_crunch/badges/gpa.svg)](https://codeclimate.com/github/kickstarter/caption_crunch)
 
 Praise @noopkat for the name.
 
