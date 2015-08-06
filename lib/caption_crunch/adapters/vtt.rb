@@ -104,16 +104,15 @@ module CaptionCrunch
         def parse_time(timestamp)
           match = TIME_REGEX.match(timestamp.strip)
           raise ParseError, "Invalid timestamp: #{timestamp}" unless match
-          milliseconds_from_captures(match.captures)
+          milliseconds_from_captures(match.captures.reverse)
         end
 
+        # The elements in +captures+ should match the order of the scalars,
+        # which are the ratio between a single millisecond and each unit.
         def milliseconds_from_captures(captures)
-          integer = 0
-          integer += captures.pop.to_i                  # msecs
-          integer += captures.pop.to_i * 1000           # secs
-          integer += captures.pop.to_i * 1000 * 60      # mins
-          integer += captures.pop.to_i * 1000 * 60 * 60 # hours
-          integer
+          msecs, secs, mins, hours = 1, 1000, 1000 * 60, 1000 * 60 * 60
+          iterator = [msecs, secs, mins, hours].each_with_index
+          iterator.map{ |scalar, i| scalar * captures[i].to_i }.reduce(:+)
         end
       end
     end
