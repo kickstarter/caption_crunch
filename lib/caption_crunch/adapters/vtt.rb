@@ -78,21 +78,26 @@ module CaptionCrunch
           parts = segment.split(NEWLINE_REGEX)
           # ignore optional identifier for now
           parts.shift unless parts[0] =~ ARROW_REGEX
-
-          # parse time and cue settings
-          times = parts.shift.to_s.split(ARROW_REGEX)
-          raise ParseError, "Cue timings missing: #{segment}" if times.size != 2
-          start_time = times.first.strip
-          end_time, settings = times.last.strip.split(/\s+/, 2)
-
-          # parse payload
-          payload = parts.map(&:strip).join("\n")
+          start_time, end_time = parse_times(segment, parts)
 
           Cue.new.tap do |cue|
             cue.start_time = parse_time(start_time)
             cue.end_time = parse_time(end_time)
-            cue.payload = payload
+            cue.payload = parse_payload(parts)
           end
+        end
+
+        def parse_times(segment, parts)
+          times = parts.shift.to_s.split(ARROW_REGEX)
+          raise ParseError, "Cue timings missing: #{segment}" if times.size != 2
+          start_time = times.first.strip
+          # ignore settings for now
+          end_time, settings = times.last.strip.split(/\s+/, 2)
+          [start_time, end_time]
+        end
+
+        def parse_payload(parts)
+          parts.map(&:strip).join("\n")
         end
 
         # Converts a timestamp into an integer representing the milliseconds.
