@@ -104,7 +104,10 @@ module CaptionCrunch
         def parse_time(timestamp)
           match = TIME_REGEX.match(timestamp.strip)
           raise ParseError, "Invalid timestamp: #{timestamp}" unless match
-          captures = match.captures
+          milliseconds_from_captures(match.captures)
+        end
+
+        def milliseconds_from_captures(captures)
           integer = 0
           integer += captures.pop.to_i                  # msecs
           integer += captures.pop.to_i * 1000           # secs
