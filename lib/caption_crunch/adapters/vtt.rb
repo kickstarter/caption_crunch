@@ -11,7 +11,7 @@ module CaptionCrunch
       #         102:01:43:204
       # http://dev.w3.org/html5/webvtt/#dfn-collect-a-webvtt-timestamp
       TIME_REGEX      = /\A(?:(\d\d+):)?([0-5]\d):([0-5]\d)\.(\d\d\d)\Z/.freeze
-      NEWLINE_REGEX   = /\n/.freeze
+      NEWLINE_REGEX   = /\r?\n/.freeze
 
       class << self
         # Reads a file (or string) and returns a CaptionCrunch::Track instance.
